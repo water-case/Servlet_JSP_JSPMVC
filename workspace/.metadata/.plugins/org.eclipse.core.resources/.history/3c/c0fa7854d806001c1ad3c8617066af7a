@@ -1,0 +1,12 @@
+package com.newlecture.web.entity;
+
+import java.util.Date;
+
+public class Notice {
+	String title = rs.getString("TITLE");
+	Date regdate = rs.getDate("REGDATE");
+	String writerId = rs.getString("WRITER_ID");
+	String hit = rs.getString("HIT");
+	String files = rs.getString("FILES");
+	String content = rs.getString("CONTENT");
+}

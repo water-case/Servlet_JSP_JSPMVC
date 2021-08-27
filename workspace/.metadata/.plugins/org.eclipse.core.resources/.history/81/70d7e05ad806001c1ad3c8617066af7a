@@ -1,0 +1,13 @@
+package com.newlecture.web.entity;
+
+import java.util.Date;
+
+public class Notice {
+	int id;
+	String title;
+	Date regdate;
+	String writerId;
+	String hit;
+	String files;
+	String content;
+}
