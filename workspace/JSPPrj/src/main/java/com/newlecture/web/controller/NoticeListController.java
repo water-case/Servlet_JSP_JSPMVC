@@ -17,47 +17,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.service.NoticeService;
 
 @WebServlet("/notice/list")
 public class NoticeListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String field_ = request.getParameter("f");
+		String query_ = request.getParameter("q");
+		String page_ = request.getParameter("p");
 		
-		List<Notice> list = new ArrayList<>();
-		
-		String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
-		String sql = "SELECT * FROM NOTICE ORDER BY ID";
+		String field = "title";
+		if(field_ != null && !field_.equals(""))
+			field = field_;
 
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection(url,"newlec","1234");
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-			
-			while(rs.next()) {
-				int id = rs.getInt("ID");
-				String title = rs.getString("TITLE");
-				String writerId = rs.getString("WRITER_ID");
-				Date regdate = rs.getDate("REGDATE");
-				String hit = rs.getString("HIT");
-				String files = rs.getString("FILES");
-				String content = rs.getString("CONTENT");
-				
-				Notice n = new Notice(id, title, writerId, regdate, hit, files, content);
-				list.add(n);
-			}
-			
-			
-			rs.close();
-			st.close();
-			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String query = "";
+		if(query_ != null && !query_.equals(""))
+			query = query_;
+
+		int page = 1;
+		if(page_ != null && !page_.equals(""))
+			page = Integer.parseInt(page_);
+		
+		NoticeService service = new NoticeService();
+		List<Notice> list = service.getNoticeList(field, query, page);
 		
 		request.setAttribute("list", list);
 		
